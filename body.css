@@ -56,6 +56,10 @@
   box-shadow: 0 0 10px #b83f45;
 }
 
+.sheet__input_listed {
+  border-radius: 4px 4px 0 0;
+}
+
 .sheet__list {
   display: flex;
   flex-flow: row nowrap;
@@ -64,7 +68,7 @@
   gap: 2rem;
   background-color: #fff;
   color: var(--text-color);
-  /* box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2); */
+  box-shadow: 0 0px 8px rgba(0, 0, 0, 0.2);
   border-bottom: 1px solid var(--gray-color);
   /* border-radius: 4px; */
   font-size: 1.5rem;
@@ -83,47 +87,63 @@
 }
 
 .sheet__checkbox {
-  width: 1.5rem;
-  height: 1.5rem;
-  background-color: var(--bg-color);
-  border-radius: 50%;
-  vertical-align: middle;
-  border: 1px solid var(--gray-color);
-  appearance: none;
-  -webkit-appearance: none;
-  outline: none;
+  visibility: hidden;
+  position: absolute;
+
+}
+
+
+.sheet__checkbox-label {
   cursor: pointer;
 }
 
-.sheet__checkbox:not(:checked)::after {
-  color: var(--gray-color);
+.sheet__checkbox-label::after {
+  display: block;
   content: '';
+  border: 1px solid var(--gray-color);
+  min-height: 30px;
+  min-width: 30px;
+  max-height: 35px;
+  max-width: 35px;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
 
+.sheet__checkbox:hover~.sheet__checkbox-label::after {
+  border: 1px solid var(--hover-color);
+  min-height: 30px;
+  min-width: 30px;
+  max-height: 35px;
+  max-width: 35px;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.sheet__checkbox:checked~.sheet__checkbox-label::after {
+  content: url('public/checkbox-checked.svg');
+
+  text-align: center;
+  border: 1px solid green;
+  min-height: 30px;
+  min-width: 30px;
+  max-height: 35px;
+  max-width: 35px;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
 }
 
 
-.sheet__checkbox:checked {
-  border-color: green;
-  transition: border-color 0.2s;
-}
 
-.sheet__checkbox:checked+.sheet__label {
+.sheet__checkbox:checked~.sheet__label {
   text-decoration: line-through;
   color: var(--gray-color);
 }
 
-.sheet__checkbox:checked::after {
-  color: green;
-  content: '✔';
-  position: relative;
-  font-size: 1rem;
-  top: 0;
-  left: 0.3vw;
-  transition: all 0.2s;
-}
-
 .sheet__list:hover .sheet__delete {
-  font-size: 2rem;
+  visibility: visible;
 }
 
 .sheet__checkbox:hover {
@@ -143,17 +163,59 @@
 }
 
 .sheet__delete {
-
+  visibility: hidden;
   position: relative;
   right: 1vw;
   color: var(--heading-color);
-  font-size: 0;
+  font-size: 2rem;
   background: none;
   border: none;
   padding: 0;
+  max-height: 30px;
 }
 
 .sheet__delete:hover {
   color: var(--hover-color);
   cursor: pointer;
+}
+
+.sheet__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  height: 40px;
+  background-color: white;
+  justify-content: center;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 2px 8px var(--gray-color);
+}
+
+.sheet__bottom::before {
+  z-index: -1;
+  position: relative;
+  display: block;
+  align-self: center;
+  content: '';
+  width: 98%;
+  height: 48px;
+  background-color: white;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 2px 8px var(--gray-color);
+}
+
+.sheet__bottom::after {
+  z-index: -4;
+  position: relative;
+  display: block;
+  align-self: center;
+  content: '';
+  width: 96%;
+  height: 8px;
+  background-color: white;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 2px 8px var(--gray-color);
+}
+
+
+.sheet__bottom_hidden {
+  display: none;
 }
