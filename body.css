@@ -12,6 +12,12 @@
   box-sizing: border-box;
 }
 
+*::selection {
+  background: var(--heading-color);
+}
+
+
+
 .body {
   display: flex;
   flex-flow: column wrap;
@@ -150,12 +156,20 @@
   border-color: var(--hover-color);
 }
 
-
-
 .sheet__label {
   margin: 0;
   overflow-wrap: break-word;
   width: 85%;
+  outline: none;
+  margin: 2px;
+}
+
+
+.sheet__label:focus-within {
+  outline: 2px solid var(--heading-color);
+  margin: 2px;
+  caret-color: var(--hover-color);
+  caret: var(--hover-color);
 }
 
 .sheet__div {
@@ -171,7 +185,7 @@
   background: none;
   border: none;
   padding: 0;
-  max-height: 30px;
+  max-height: 40px;
 }
 
 .sheet__delete:hover {
