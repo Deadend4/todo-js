@@ -181,6 +181,7 @@
 
 .sheet__bottom {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   height: 40px;
   background-color: white;
@@ -196,7 +197,7 @@
   align-self: center;
   content: '';
   width: 98%;
-  height: 48px;
+  height: 46px;
   background-color: white;
   border-radius: 0 0 4px 4px;
   box-shadow: 0 2px 8px var(--gray-color);
@@ -209,7 +210,8 @@
   align-self: center;
   content: '';
   width: 96%;
-  height: 8px;
+  height: 6px;
+  top: -3.1rem;
   background-color: white;
   border-radius: 0 0 4px 4px;
   box-shadow: 0 2px 8px var(--gray-color);
@@ -218,4 +220,15 @@
 
 .sheet__bottom_hidden {
   display: none;
+}
+
+.sheet__bottom-content {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  position: relative;
+  width: 100%;
+  top: -3.1rem;
+  font-size: 1rem;
+  padding: 0 1rem;
 }

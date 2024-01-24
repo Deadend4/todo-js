@@ -17,7 +17,11 @@
   <form class="sheet" id="sheet" onsubmit="addNode(this); return false;">
     <input type="text" placeholder="What needs to be done?" class="sheet__input" id="sheet__input" />
     <div id="sheet__div" class="sheet__div"></div>
-    <div id="sheet__bottom" class="sheet__bottom sheet__bottom_hidden"></div>
+    <div id="sheet__bottom" class="sheet__bottom sheet__bottom_hidden">
+      <div class="sheet__bottom-content">
+        <p id="sheet__items-left">0 items left</p>
+      </div>
+    </div>
   </form>
   <script src="sheet.js"></script>
 </body>
