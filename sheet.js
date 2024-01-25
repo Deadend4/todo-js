@@ -1,27 +1,59 @@
+'use strict'
+
 const sheet = document.getElementById('sheet__div');
-const sheet__input = document.getElementById('sheet__input');
-const sheet__bottom = document.getElementById('sheet__bottom');
-const sheet__itemsLeft = document.getElementById('sheet__items-left');
+const sheetInput = document.getElementById('sheet__input');
+const sheetBottom = document.getElementById('sheet__bottom');
+const sheetItemsLeft = document.getElementById('sheet__items-left');
+const sheetToggleAll = document.querySelector('.sheet__toggle-all');
+const sheetToggleAllLabel = document.querySelector('.sheet__toggle-all-label');
+const sheetFilterAll = document.getElementById('sheet__filter-all');
+const sheetFilterActive = document.getElementById('sheet__filter-active');
+const sheetFilterCompleted = document.getElementById('sheet__filter-completed');
+const sheetFilterLabels = document.querySelectorAll('.sheet__filter-label');
+const sheetClearComplete = document.querySelector('.sheet__clear-complete');
+
 let index = 0;
 let leftCounter = 0;
-function addNode() {
-    const message = document.getElementById('sheet__input');
-    if (message.value !== '') {
+let sheetToggles = [];
 
-        if (index === 0) {
-            sheet__bottom.classList.remove('sheet__bottom_hidden');
-            sheet__input.classList.add('sheet__input_listed');
-        }
-        console.log(message);
-        if (message.value !== '') {
-            createBlock(sheet, message.value);
-        }
-        message.value = '';
-    }
+sheetToggleAllLabel.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleAll();
+    return false;
+});
 
+sheetClearComplete.addEventListener('click', (e) => {
+    e.preventDefault();
+    clearCompleted(sheet, sheetToggles);
+    return false;
+})
+
+function toggleAll() {
+    sheetToggles = document.querySelectorAll('.sheet__checkbox');
+    sheetToggleAll.checked = leftCounter > 0 && (leftCounter === sheetToggles.length || !sheetToggleAll.checked);
+    sheetToggles.forEach((item) => {
+        item.checked = sheetToggleAll.checked;
+    });
+    leftCounter = sheetToggleAll.checked ? 0 : sheetToggles.length;
+    showHideClearComplete(sheetToggles.length, leftCounter);
+    updateLeftItems(sheetItemsLeft, leftCounter);
 }
 
-function createBlock(root, textMessage) {
+function addNode() {
+    if (sheetInput.value !== '') {
+        if (index === 0) {
+            sheetBottom.classList.remove('sheet__bottom_hidden');
+            sheetInput.classList.add('sheet__input_listed');
+            sheetToggleAllLabel.classList.remove('sheet__toggle-all-label_hidden');
+        }
+        if (sheetInput.value !== '') {
+            createBlock(sheet, sheetInput.value);
+        }
+        sheetInput.value = '';
+    }
+}
+
+function createBlock(root, textsheetInput) {
     /* the main container for a list item */
     const listBlock = document.createElement('div');
     listBlock.classList.add('sheet__list');
@@ -41,7 +73,9 @@ function createBlock(root, textMessage) {
         } else {
             leftCounter++;
         }
-        updateSheetBottom(sheet__itemsLeft, leftCounter);
+        sheetToggles = document.querySelectorAll('.sheet__checkbox');
+        showHideClearComplete(sheetToggles.length, leftCounter);
+        updateLeftItems(sheetItemsLeft, leftCounter);
     });
     innerBlock.append(listCheckbox);
     /* label for checkbox */
@@ -53,7 +87,7 @@ function createBlock(root, textMessage) {
     /* todo text  */
     const listText = document.createElement('label');
     listText.classList.add('sheet__label');
-    listText.innerHTML = textMessage;
+    listText.innerHTML = textsheetInput;
     listText.contentEditable = true;
     innerBlock.append(listText);
 
@@ -63,37 +97,57 @@ function createBlock(root, textMessage) {
     listDelete.type = 'button';
     listDelete.addEventListener('click', (e) => {
         e.preventDefault();
-        destroy_oneListElement(sheet, listBlock);
-        delete_parentNode(listDelete);
+        destroyOneListElement(sheet, listBlock);
         return false;
     });
     listDelete.classList.add('sheet__delete');
     listBlock.append(listDelete);
+    /*update ui*/
     index++;
     leftCounter++;
-    updateSheetBottom(sheet__itemsLeft, leftCounter);
+    updateLeftItems(sheetItemsLeft, leftCounter);
 }
 
-function updateSheetBottom(node, counter) {
+function updateLeftItems(node, counter) {
     const counterStrings = node.innerHTML.split(' ');
     counterStrings[0] = counter;
     node.innerHTML = counterStrings.join(' ');
 }
 
-function destroy_oneListElement(root, list) {
+function switchFilters() {
+    /*in progress*/
+}
+
+function showHideClearComplete(length, counter) {
+    if (counter < length) {
+        sheetClearComplete.classList.remove('sheet__clear-complete-label_hidden');
+    } else {
+        sheetClearComplete.classList.add('sheet__clear-complete-label_hidden');
+    }
+}
+
+function clearCompleted(root, checkboxes) {
+    checkboxes.forEach((item) => {
+        if (item.checked) {
+            destroyOneListElement(root, item.parentNode.parentNode);
+        }
+    })
+}
+
+function destroyOneListElement(root, list) {
     root.removeChild(list);
     if (root.lastElementChild === null) {
         index = 0;
-        sheet__bottom.classList.add('sheet__bottom_hidden');
-        sheet__input.classList.remove('sheet__input_listed');
+        sheetBottom.classList.add('sheet__bottom_hidden');
+        sheetInput.classList.remove('sheet__input_listed');
+        sheetToggleAllLabel.classList.add('sheet__toggle-all-label-hidden');
     }
     if (!list.querySelector('.sheet__checkbox').checked) {
         leftCounter--;
     }
-
-    updateSheetBottom(sheet__itemsLeft, leftCounter);
+    updateLeftItems(sheetItemsLeft, leftCounter);
 }
 
-function delete_lastRow(currentNode) {
+function destroyLastRow(currentNode) {
     currentNode.parentNode.parentNode.removeChild(currentNode.parentNode.parentNode.lastElementChild);
 }

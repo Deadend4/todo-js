@@ -15,12 +15,29 @@
 <body class="body">
   <h1 class="body__heading">todos</h1>
   <form class="sheet" id="sheet" onsubmit="addNode(this); return false;">
+    <input type="checkbox" id="sheet__toggle-all" class="sheet__toggle-all" />
+    <label for="sheet__toggle-all" class="sheet__toggle-all-label sheet__toggle-all-label_hidden"
+      title="Toggle all"></label>
     <input type="text" placeholder="What needs to be done?" class="sheet__input" id="sheet__input" />
+
     <div id="sheet__div" class="sheet__div"></div>
     <div id="sheet__bottom" class="sheet__bottom sheet__bottom_hidden">
       <div class="sheet__bottom-content">
         <p id="sheet__items-left">0 items left</p>
+        <div class="sheet__filter-block">
+          <input type='radio' id="sheet__filter-all" class="sheet__filter" name="filter">
+          <label for='sheet__filter-all' id="sheet__filter-all-label"
+            class="sheet__filter-label sheet__filter-label_active">All</label>
+          <input type='radio' id="sheet__filter-active" class="sheet__filter" name="filter">
+          <label for='sheet__filter-active' id="sheet__filter-label" class="sheet__filter-label">Active</label>
+          <input type='radio' id="sheet__filter-completed" class="sheet__filter" name="filter">
+          <label for='sheet__filter-completed' id="sheet__filter-completed-label"
+            class="sheet__filter-label">Completed</label>
+        </div>
+        <button type='button' id="sheet__clear-complete" class="sheet__clear-complete">Clear Completed</button>
+
       </div>
+
     </div>
   </form>
   <script src="sheet.js"></script>
