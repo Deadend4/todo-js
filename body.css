@@ -22,8 +22,6 @@
   background: var(--heading-color);
 }
 
-
-
 .body {
   display: flex;
   flex-flow: column wrap;
@@ -57,6 +55,7 @@
   content: url('public/arrow-toggle.svg');
   bottom: -2.8rem;
   left: 1rem;
+  z-index: 2;
 }
 
 .sheet__toggle-all-label:hover {
@@ -69,10 +68,10 @@
 }
 
 .sheet__clear-complete {
+  font-size: var(--font-size-desktop-s);
   align-self: center;
   border: 2px solid transparent;
-
-  -webkit-touch-callout: none;
+  background-color: transparent;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
@@ -93,6 +92,8 @@
 }
 
 .sheet__input {
+  position: sticky;
+  top: 0;
   background-color: #fff;
   color: var(--text-color);
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
@@ -109,15 +110,15 @@
 }
 
 .sheet__input:focus {
-  outline: solid 1px #b83f45;
-  box-shadow: 0 0 10px #b83f45;
+  outline: solid 1px var(--heading-color);
+  box-shadow: 0 0 10px var(--heading-color);
 }
 
 .sheet__input_listed {
   border-radius: 4px 4px 0 0;
 }
 
-.sheet__list {
+.list__item {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
@@ -129,10 +130,9 @@
   border-bottom: 1px solid var(--gray-color);
   font-size: var(--font-size-desktop-m);
   padding: 1.2rem 1rem 1.2rem 0.5rem;
-  width: 100%;
 }
 
-.sheet__inner-list {
+.list__item-content {
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
@@ -142,18 +142,16 @@
   width: 100%;
 }
 
-.sheet__checkbox {
+.list__checkbox {
   visibility: hidden;
   position: absolute;
-
 }
 
-
-.sheet__checkbox-label {
+.list__checkbox-label {
   cursor: pointer;
 }
 
-.sheet__checkbox-label::after {
+.list__checkbox-label::after {
   display: block;
   content: '';
   border: 1px solid var(--gray-color);
@@ -166,7 +164,7 @@
   border-radius: 50%;
 }
 
-.sheet__checkbox:hover~.sheet__checkbox-label::after {
+.list__checkbox:hover ~ .list__checkbox-label::after {
   border: 1px solid var(--hover-color);
   min-height: 30px;
   min-width: 30px;
@@ -177,51 +175,50 @@
   border-radius: 50%;
 }
 
-.sheet__checkbox:checked~.sheet__checkbox-label::after {
+.list__checkbox:checked ~ .list__checkbox-label::after {
   content: url('public/checkbox-checked.svg');
   text-align: center;
   line-height: 2rem;
   border: 1px solid green;
 }
 
-.sheet__checkbox:checked~.sheet__label {
+.list__checkbox:checked ~ .list__item-text {
   text-decoration: line-through;
   color: var(--gray-color);
 }
 
-.sheet__list:hover .sheet__delete {
+.list__item:hover .list__delete-item {
   visibility: visible;
 }
 
-.sheet__checkbox:hover {
+.list__checkbox:hover {
   border-color: var(--hover-color);
 }
 
-.sheet__label {
+.list__item-text {
   margin: 0;
-  overflow-wrap: break-word;
-  width: 85%;
+  width: 100%;
   outline: none;
   margin: 2px;
+  overflow-wrap: anywhere;
 }
 
-
-.sheet__label:focus-within {
+.list__item-text:focus {
   outline: 2px solid var(--heading-color);
   margin: 2px;
   caret-color: var(--hover-color);
   caret: var(--hover-color);
 }
 
-.sheet__div {
+.list {
   width: 100%;
 }
 
-.sheet__delete {
+.list__delete-item {
   visibility: hidden;
   position: relative;
   right: 1vw;
-  color: var(--heading-color);
+  color: var(--gray-color);
   font-size: 2rem;
   background: none;
   border: none;
@@ -229,8 +226,8 @@
   max-height: 40px;
 }
 
-.sheet__delete:hover {
-  color: var(--hover-color);
+.list__delete-item:hover {
+  color: var(--heading-color);
   cursor: pointer;
 }
 
@@ -272,7 +269,6 @@
   box-shadow: 0 2px 8px var(--gray-color);
 }
 
-
 .sheet__bottom_hidden {
   display: none;
 }
@@ -293,7 +289,6 @@
   flex-flow: row nowrap;
   gap: 1rem;
   align-items: center;
-
 }
 
 .sheet__filter {
@@ -318,16 +313,15 @@
 }
 
 @media (max-width: 1280px) {
-
   .body__heading {
     font-size: var(--font-size-mobile-b);
   }
 
-  .sheet__list {
+  .list__item {
     font-size: var(--font-size-mobile-m);
   }
 
-  .sheet__delete {
+  .list__delete-item {
     visibility: visible;
   }
 }
@@ -342,8 +336,35 @@
   }
 
   .sheet__bottom-content {
-
     font-size: var(--font-size-mobile-s);
     top: -3rem;
+  }
+  .sheet__clear-complete {
+    font-size: var(--font-size-mobile-s);
+  }
+  .sheet__bottom {
+    height: 60px;
+  }
+
+  .sheet__bottom::before {
+    z-index: -3;
+    height: 68px;
+  }
+
+  .sheet__bottom::after {
+    z-index: -4;
+    width: 96%;
+    height: 10px;
+    top: -5.5rem;
+  }
+  .sheet__bottom-content {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    position: relative;
+    width: 100%;
+    top: -5.1rem;
+    font-size: var(--font-size-desktop-s);
+    padding: 0 1rem;
   }
 }
