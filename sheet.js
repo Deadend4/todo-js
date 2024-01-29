@@ -110,8 +110,7 @@ function createBlock(root, textSheetInput) {
   listCheckbox.id = `chechbox${index}`;
   listCheckbox.classList.add('list__checkbox');
 
-  listCheckbox.addEventListener('change', function () {
-    sheetToggles = document.querySelectorAll('.list__checkbox');
+  listCheckbox.addEventListener('change', () => {
     if (this.checked) {
       leftCounter--;
       if (filterStatus === 'active') {
@@ -147,7 +146,20 @@ function createBlock(root, textSheetInput) {
   const listText = document.createElement('label');
   listText.classList.add('list__item-text');
   listText.innerHTML = textSheetInput;
-  listText.contentEditable = true;
+  listText.addEventListener('click', (e) => {
+    e.preventDefault();
+    listText.contentEditable = true;
+    return false;
+  });
+  listText.addEventListener('focusout', (e) => {
+    e.preventDefault();
+    if (listText.innerHTML === '') {
+      destroyOneListElement(sheet, listBlock);
+    }
+    listText.contentEditable = false;
+    return false;
+  });
+
   innerBlock.append(listText);
 
   const listDelete = document.createElement('button');
