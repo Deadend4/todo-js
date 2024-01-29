@@ -142,6 +142,10 @@
   width: 100%;
 }
 
+.list__item_hidden {
+  display: none;
+}
+
 .list__checkbox {
   visibility: hidden;
   position: absolute;
@@ -164,7 +168,7 @@
   border-radius: 50%;
 }
 
-.list__checkbox:hover ~ .list__checkbox-label::after {
+.list__checkbox:hover~.list__checkbox-label::after {
   border: 1px solid var(--hover-color);
   min-height: 30px;
   min-width: 30px;
@@ -175,14 +179,14 @@
   border-radius: 50%;
 }
 
-.list__checkbox:checked ~ .list__checkbox-label::after {
+.list__checkbox:checked~.list__checkbox-label::after {
   content: url('public/checkbox-checked.svg');
   text-align: center;
   line-height: 2rem;
   border: 1px solid green;
 }
 
-.list__checkbox:checked ~ .list__item-text {
+.list__checkbox:checked~.list__item-text {
   text-decoration: line-through;
   color: var(--gray-color);
 }
@@ -297,7 +301,6 @@
 }
 
 .sheet__filter-label {
-  visibility: visible;
   padding: 2px;
   margin: 4px;
   border-radius: 2px;
@@ -326,45 +329,64 @@
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 490px) {
   .sheet__input {
     font-size: var(--font-size-mobile-m);
   }
 
-  .sheet__bottom::after {
-    top: -2.8rem;
-  }
-
-  .sheet__bottom-content {
-    font-size: var(--font-size-mobile-s);
-    top: -3rem;
-  }
   .sheet__clear-complete {
     font-size: var(--font-size-mobile-s);
   }
+
+
   .sheet__bottom {
-    height: 60px;
+    display: flex;
+    flex-flow: column wrap;
+    height: 100%;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
   }
 
   .sheet__bottom::before {
-    z-index: -3;
-    height: 68px;
+    display: none;
   }
 
   .sheet__bottom::after {
-    z-index: -4;
-    width: 96%;
-    height: 10px;
-    top: -5.5rem;
+    display: none;
   }
+
   .sheet__bottom-content {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
+    align-items: center;
     position: relative;
     width: 100%;
-    top: -5.1rem;
     font-size: var(--font-size-desktop-s);
-    padding: 0 1rem;
+    padding: 0.5rem 1rem;
+    top: 0;
+  }
+
+  .sheet__bottom_hidden {
+    visibility: hidden;
+  }
+
+  #sheet__items-left {
+    margin: 0;
+  }
+
+  .sheet__clear-complete {
+    padding: 0;
+  }
+
+  .sheet__bottom-content {
+    flex-wrap: wrap;
+    gap: 0;
+    justify-content: space-around;
+  }
+
+  .sheet__filter-block {
+    order: 3;
   }
 }

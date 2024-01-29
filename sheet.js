@@ -1,20 +1,60 @@
 'use strict';
 
-const sheet = document.getElementById('list');
-const sheetInput = document.getElementById('sheet__input');
-const sheetBottom = document.getElementById('sheet__bottom');
-const sheetItemsLeft = document.getElementById('sheet__items-left');
+const sheet = document.querySelector('.list');
+const sheetInput = document.querySelector('.sheet__input');
+const sheetBottom = document.querySelector('.sheet__bottom');
+const sheetItemsLeft = document.querySelector('#sheet__items-left');
 const sheetToggleAll = document.querySelector('.sheet__toggle-all');
 const sheetToggleAllLabel = document.querySelector('.sheet__toggle-all-label');
-const sheetFilterAll = document.getElementById('sheet__filter-all');
-const sheetFilterActive = document.getElementById('sheet__filter-active');
-const sheetFilterCompleted = document.getElementById('sheet__filter-completed');
+
+const sheetFilterAll = document.querySelector('#sheet__filter-all');
+
+const sheetFilterActive = document.querySelector('#sheet__filter-active');
+const sheetFilterCompleted = document.querySelector('#sheet__filter-completed');
 const sheetFilterLabels = document.querySelectorAll('.sheet__filter-label');
+
+const sheetFilterAllLabel = document.querySelector('#sheet__filter-all-label');
+const sheetFilterActiveLabel = document.querySelector('#sheet__filter-active-label');
+const sheetFilterCompletedLabel = document.querySelector('#sheet__filter-completed-label');
+
 const sheetClearComplete = document.querySelector('.sheet__clear-complete');
 
 let index = 0;
 let leftCounter = 0;
 let sheetToggles = [];
+let filterStatus = 'all';
+
+sheetFilterAll.addEventListener('click', (e) => {
+  e.preventDefault();
+  filterStatus = 'all';
+  sheetFilterAllLabel.classList.add('sheet__filter-label_active');
+  sheetFilterActiveLabel.classList.remove('sheet__filter-label_active');
+  sheetFilterCompletedLabel.classList.remove('sheet__filter-label_active');
+  showAll(sheetToggles);
+
+  return false;
+});
+
+sheetFilterActive.addEventListener('click', (e) => {
+  e.preventDefault();
+  filterStatus = 'active';
+  sheetFilterActiveLabel.classList.add('sheet__filter-label_active');
+  sheetFilterAllLabel.classList.remove('sheet__filter-label_active');
+  sheetFilterCompletedLabel.classList.remove('sheet__filter-label_active');
+  showActive(sheetToggles);
+  return false;
+});
+
+
+sheetFilterCompleted.addEventListener('click', (e) => {
+  e.preventDefault();
+  filterStatus = 'complete';
+  sheetFilterCompletedLabel.classList.add('sheet__filter-label_active');
+  sheetFilterActiveLabel.classList.remove('sheet__filter-label_active');
+  sheetFilterAllLabel.classList.remove('sheet__filter-label_active');
+  showComplete(sheetToggles);
+  return false;
+});
 
 sheetToggleAllLabel.addEventListener('click', (e) => {
   e.preventDefault();
@@ -72,6 +112,9 @@ function createBlock(root, textSheetInput) {
   listCheckbox.addEventListener('change', function () {
     if (this.checked) {
       leftCounter--;
+      if (filterStatus === 'active') {
+        showActive(this);
+      }
     } else {
       leftCounter++;
     }
@@ -116,15 +159,46 @@ function updateLeftItems(node, counter) {
   node.innerHTML = counterStrings.join(' ');
 }
 
-function switchFilters() {
-  /*in progress*/
-}
-
 function showHideClearComplete(length, counter) {
   if (counter < length) {
     sheetClearComplete.classList.remove('sheet__clear-complete-label_hidden');
   } else {
     sheetClearComplete.classList.add('sheet__clear-complete-label_hidden');
+  }
+}
+
+function showAll(checkboxes) {
+  checkboxes.forEach((item) => {
+    item.parentNode.parentNode.classList.remove('list__item_hidden');
+  });
+}
+
+function showActive(checkbox) {
+  if (checkbox.toString() === '[object NodeList]') {
+    checkbox.forEach((item) => {
+      if (item.checked) {
+        item.parentNode.parentNode.classList.add('list__item_hidden');
+      } else {
+        item.parentNode.parentNode.classList.remove('list__item_hidden');
+      }
+    });
+  } else {
+    checkbox.parentNode.parentNode.classList.add('list__item_hidden');
+  }
+
+}
+
+function showComplete(checkbox) {
+  if (checkbox.toString() === '[object NodeList]') {
+    checkbox.forEach((item) => {
+      if (!item.checked) {
+        item.parentNode.parentNode.classList.add('list__item_hidden');
+      } else {
+        item.parentNode.parentNode.classList.remove('list__item_hidden');
+      }
+    });
+  } else {
+    checkbox.parentNode.parentNode.classList.add('list__item_hidden');
   }
 }
 
@@ -136,14 +210,18 @@ function clearCompleted(root, checkboxes) {
   });
 }
 
-function destroyOneListElement(root, list) {
-  root.removeChild(list);
+function listIsEmpty(root) {
   if (root.lastElementChild === null) {
     index = 0;
     sheetBottom.classList.add('sheet__bottom_hidden');
     sheetInput.classList.remove('sheet__input_listed');
-    sheetToggleAllLabel.classList.add('sheet__toggle-all-label-hidden');
+    sheetToggleAllLabel.classList.add('sheet__toggle-all-label_hidden');
   }
+}
+
+function destroyOneListElement(root, list) {
+  root.removeChild(list);
+  listIsEmpty(root);
   if (!list.querySelector('.list__checkbox').checked) {
     leftCounter--;
   }
