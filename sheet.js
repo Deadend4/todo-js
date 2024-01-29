@@ -109,20 +109,34 @@ function createBlock(root, textSheetInput) {
   listCheckbox.type = 'checkbox';
   listCheckbox.id = `chechbox${index}`;
   listCheckbox.classList.add('list__checkbox');
+
   listCheckbox.addEventListener('change', function () {
+    sheetToggles = document.querySelectorAll('.list__checkbox');
     if (this.checked) {
       leftCounter--;
       if (filterStatus === 'active') {
-        showActive(this);
+        showActive(sheetToggles);
       }
     } else {
+      if (filterStatus === 'complete') {
+        showComplete(sheetToggles);
+      }
       leftCounter++;
     }
-    sheetToggles = document.querySelectorAll('.list__checkbox');
     showHideClearComplete(sheetToggles.length, leftCounter);
     updateLeftItems(sheetItemsLeft, leftCounter);
   });
   innerBlock.append(listCheckbox);
+  sheetToggles = document.querySelectorAll('.list__checkbox');
+  switch (filterStatus) {
+    case 'active':
+      showActive(sheetToggles);
+      break;
+    case 'complete':
+      showComplete(sheetToggles);
+    default:
+      break;
+  }
   /* label for checkbox */
   const labelCheckbox = document.createElement('label');
   labelCheckbox.innerHTML = '';
