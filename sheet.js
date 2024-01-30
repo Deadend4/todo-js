@@ -76,6 +76,18 @@ function toggleAll() {
   sheetToggles.forEach((item) => {
     item.checked = sheetToggleAll.checked;
   });
+  switch (filterStatus) {
+    case 'active':
+      showActive(sheetToggles);
+      break;
+    case 'complete':
+      showComplete(sheetToggles);
+      break;
+    default:
+      showAll(sheetToggles);
+      break;
+  }
+
   leftCounter = sheetToggleAll.checked ? 0 : sheetToggles.length;
   showHideClearComplete(sheetToggles.length, leftCounter);
   updateLeftItems(sheetItemsLeft, leftCounter);
@@ -111,7 +123,7 @@ function createBlock(root, textSheetInput) {
   listCheckbox.classList.add('list__checkbox');
 
   listCheckbox.addEventListener('change', () => {
-    if (this.checked) {
+    if (listCheckbox.checked) {
       leftCounter--;
       if (filterStatus === 'active') {
         showActive(sheetToggles);
